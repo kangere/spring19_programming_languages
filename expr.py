@@ -1,8 +1,10 @@
+from abc import ABC, abstractmethod
 
-
-class Expr:
-	"""	Base class for all expressions """
-	pass
+class Expr(ABC):
+	"""	Abstract Base class for all expressions """
+	@abstractmethod
+	def __str__(self):
+		pass
 
 class BoolExpr(Expr):
 	def __init__(self,value):
