@@ -37,7 +37,22 @@ def same(arg1,arg2):
 	"""
 	assert isinstance(arg1,Expr), "arg1 is not an expression, Expression type required"
 	assert isinstance(arg2,Expr), "arg2 is not an expression, Expression type required"
-	return value(arg1) == value(arg2)
+	
+	if type(arg1) is not type(arg2):
+		return False
+
+	if isinstance(arg1,BoolExpr):
+		return arg1.value == arg2.value
+
+	if isinstance(arg1,NotExpr):
+		return same(arg1.e1,arg2.e1)
+
+	if isinstance(arg1,BinaryExpr):
+		return same(arg1.e1,arg2.e1) and same(arg1.e2,arg2.e2)
+
+	raise Exception("Illegal state exception")
+
+
 
 
 def value(expr):

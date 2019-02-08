@@ -7,6 +7,7 @@ class ExprTest(unittest.TestCase):
 		self.bool_expr = BoolExpr(False)
 		self.not_expr = NotExpr(BoolExpr(True))
 		self.and_expr = AndExpr(BoolExpr(False),BoolExpr(True))
+		self.and_expr_same = AndExpr(BoolExpr(False),BoolExpr(True))
 		self.or_expr = OrExpr(BoolExpr(True),NotExpr(BoolExpr(True)))
 
 	def test_height(self):
@@ -22,7 +23,8 @@ class ExprTest(unittest.TestCase):
 		self.assertFalse(func.value(self.not_expr))
 
 	def test_same(self):
-		self.assertTrue(func.same(self.not_expr,self.and_expr))
+		self.assertFalse(func.same(self.not_expr,self.and_expr))
+		self.assertTrue(func.same(self.and_expr,self.and_expr_same))
 
 	def test_size(self):
 		self.assertEqual(func.size(self.bool_expr),1)
