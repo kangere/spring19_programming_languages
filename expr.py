@@ -41,3 +41,34 @@ class AndExpr(BinaryExpr):
 class OrExpr(BinaryExpr):
 	def __str__(self):
 		return str(self.e1) + " Or " + str(self.e2)
+
+
+class IdExpr(Expr):
+	"""
+		IdExpression to reference other expressions
+	"""
+	def __init__(self,expr):
+		self.expr = expr
+
+	def __str__(self):
+		return f"{self.expr}"
+
+class Var:
+	"""
+		Variable class to hold names
+	"""
+	def __init__(self,name):
+		self._name = name
+
+class AbsExpr(Expr):
+	"""
+		Lambda Expression
+	"""
+	def __init__(self,var,exp):
+		assert isinstance(exp,Expr), "Expression type required, actual"
+		self.var = var
+		self.exp = exp
+
+	def __str__(self):
+		return f"\\{self.var._name}.{self.exp}"
+
