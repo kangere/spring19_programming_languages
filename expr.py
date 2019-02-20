@@ -12,7 +12,7 @@ class BoolExpr(Expr):
 		self.value = value
 
 	def __str__(self):
-		return str(self.value)
+		return f"{self.value}"
 
 class NotExpr(Expr):
 	def __init__(self,e1):
@@ -20,7 +20,7 @@ class NotExpr(Expr):
 		self.e1 = e1;
 
 	def __str__(self):
-		return "Not " + str(self.e1)
+		return f"Not {self.e1}"
 
 class BinaryExpr(Expr):
 	"""
@@ -35,12 +35,12 @@ class BinaryExpr(Expr):
 
 class AndExpr(BinaryExpr):
 	def __str__(self):
-		return str(self.e1) + " And " + str(self.e2)
+		return f"{self.e1} And {self.e2}"
 
 
 class OrExpr(BinaryExpr):
 	def __str__(self):
-		return str(self.e1) + " Or " + str(self.e2)
+		return f"{self.e1} Or {self.e2}"
 
 
 class IdExpr(Expr):
