@@ -1,6 +1,7 @@
 from abc import ABC, abstractmethod
+from utils import *
 
-class Expr(ABC):
+class Expr(TypeCheckerMixIn,ABC):
 	"""	Abstract Base class for all expressions """
 	@abstractmethod
 	def __str__(self):
@@ -47,11 +48,12 @@ class IdExpr(Expr):
 	"""
 		IdExpression to reference other expressions
 	"""
-	def __init__(self,expr):
-		self.expr = expr
+	def __init__(self,_id):
+		self.ref = None
+		self._id = _id 
 
 	def __str__(self):
-		return f"{self.expr}"
+		return f"{self._id} -> {self.ref}"
 
 class Var:
 	"""
@@ -64,11 +66,25 @@ class AbsExpr(Expr):
 	"""
 		Lambda Expression
 	"""
-	def __init__(self,var,exp):
-		assert isinstance(exp,Expr), "Expression type required, actual"
+	def __init__(self,var,expr):
+		assert isinstance(exp,IdExpr), "Expression type required, actual: " + type(exp)
 		self.var = var
-		self.exp = exp
+		self.expr = expr
 
 	def __str__(self):
-		return f"\\{self.var._name}.{self.exp}"
+		return f"\\{self.var._name}.{self.expr}"
+
+class AppExpr(Expr):
+	"""
+		Application Expression 
+	"""
+	def __init__(self,e1,e2):
+		assert isinstance(e1,Expr), "Expression type required, actual: " +type(e1)
+		assert isinstance(e2,Expr), "Expression type required, actual: " +type(e2)
+		self.e1 = e1
+		self.e2 = e2
+
+	def __str__(self):
+		return f"{self.e1} {self.e2}"
+
 

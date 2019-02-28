@@ -12,19 +12,19 @@ def height(expr):
 	"""
 	assert isinstance(expr,Expr), "expr is not an expression, Expression type required"
 
-	if isinstance(expr,BoolExpr):
+	if expr.is_a(BoolExpr):
 		return 0;
 
-	if isinstance(expr,NotExpr):
+	if expr.is_a(NotExpr):
 		return 1 + height(expr.e1)
 
-	if isinstance(expr,BinaryExpr):
+	if expr.is_a(BinaryExpr):
 		return 1 + max([height(expr.e1), height(expr.e2)])
 
 	raise Exception("Illegal state exception")
 
 
-# not sure if same means equality of values or eqaulity of types
+
 def same(arg1,arg2):
 	"""
 		Function checks if two expressions are identical
@@ -41,13 +41,13 @@ def same(arg1,arg2):
 	if type(arg1) is not type(arg2):
 		return False
 
-	if isinstance(arg1,BoolExpr):
+	if arg1.is_a(BoolExpr):
 		return arg1.value == arg2.value
 
-	if isinstance(arg1,NotExpr):
+	if arg1.is_a(NotExpr):
 		return same(arg1.e1,arg2.e1)
 
-	if isinstance(arg1,BinaryExpr):
+	if arg1.is_a(BinaryExpr):
 		return same(arg1.e1,arg2.e1) and same(arg1.e2,arg2.e2)
 
 	raise Exception("Illegal state exception")
@@ -67,16 +67,16 @@ def value(expr):
 	"""
 	assert isinstance(expr,Expr), "expr is not an expression, Expression type required"
 
-	if isinstance(expr,BoolExpr):
+	if expr.is_a(BoolExpr):
 		return expr.value
 
-	if isinstance(expr,NotExpr):
+	if expr.is_a(NotExpr):
 		return not value(expr.e1)
 
-	if isinstance(expr,AndExpr):
+	if expr.is_a(AndExpr):
 		return value(expr.e1) and value(expr.e2)
 
-	if isinstance(expr,OrExpr):
+	if expr.is_a(OrExpr):
 		return value(expr.e1) or value(expr.e2)
 
 	raise Exception("Illegal state exception")
@@ -94,13 +94,13 @@ def size(expr):
 	"""
 	assert isinstance(expr,Expr), "expr is not an expression, Expression type required"
 
-	if isinstance(expr,BoolExpr):
+	if expr.is_a(BoolExpr):
 		return 1;
 
-	if isinstance(expr,NotExpr):
+	if expr.is_a(NotExpr):
 		return 1 + size(expr.e1)
 
-	if isinstance(expr,BinaryExpr):
+	if expr.is_a(BinaryExpr):
 		return 1 + size(expr.e1) + size(expr.e2)
 
 	raise Exception("Illegal state exception")
@@ -118,27 +118,27 @@ def step(expr):
 	"""
 	assert isinstance(expr,Expr), "expr is not an expression, Expression type required"
 
-	if isinstance(expr,BoolExpr):
+	if expr.is_a(BoolExpr):
 		return expr
 
-	if isinstance(expr,NotExpr):
-		if isinstance(expr.e1,BoolExpr):
+	if expr.is_a(NotExpr):
+		if expr.e1.is_a(BoolExpr):
 			return BoolExpr(not value(expr.e1))
 		else:
 			return NotExpr(step(expr.e1))
 
-	if isinstance(expr,AndExpr):
-		if not isinstance(expr.e1,BoolExpr):
+	if expr.is_a(AndExpr):
+		if not expr.e1.is_a(BoolExpr):
 			return AndExpr(step(expr.e1), expr.e2)
-		elif not isinstance(expr.e2,BoolExpr):
+		elif not expr.e2.is_a(BoolExpr):
 			return AndExpr(expr.e1, step(expr.e2))
 		else:
 			return BoolExpr(value(expr))
 
-	if isinstance(expr, OrExpr):
-		if not isinstance(expr.e1,BoolExpr):
+	if expr.is_a(OrExpr):
+		if not expr.e1.is_a(BoolExpr):
 			return OrExpr(step(expr.e1), expr.e2)
-		elif not isinstance(expr.e2,BoolExpr):
+		elif not expr.e2.is_a(BoolExpr):
 			return OrExpr(expr.e1, step(expr.e2))
 		else:
 			return BoolExpr(value(expr))
@@ -160,8 +160,43 @@ def reduce(expr):
 
 	new_expr = step(expr)
 
-	while not isinstance(new_expr,BoolExpr):
+	while not new_expr.is_a(BoolExpr):
 		new_expr = step(new_expr)
 
 	return new_expr
 
+
+def resolve(e, env = []):
+
+	if isinstance(e,IdExpr):
+		for var in reversed(env):
+			if e._id == var._name:
+				e.ref = var
+		return
+
+	if isinstance(e,AbsExpr):
+		env = env + [expr.var]
+		resolve(e.expr,env)
+		return 
+
+	if isinstance(e,AppExpr):
+		resolve(e.e1,env)
+		resolve(e.e2,env)
+		return 
+
+def subst(e,s):
+	assert isinstance(e,Expr), "Expression type required"
+	
+	if e.is_a(IdExpr):
+		expr = s.get(e.ref)
+		
+		if expr is not None:
+			return expr
+		else
+			return e
+
+	if isinstance(e,AbsExpr):
+		return AbsExpr(e.var,subst(e.expr,s))
+
+	if isinstance(e,AppExpr):
+		return AppExpr(subst(e.e1,s), subst(e.e2,s))
