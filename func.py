@@ -1,5 +1,12 @@
 from expr import *
 
+def is_value(e):
+	return type(e) in (IdExpr,AbsExpr,BoolExpr)
+
+def is_reducible(e):
+	return not is_value(e)
+
+
 def height(expr):
 	"""
 		Function computes height of an expression
@@ -118,7 +125,7 @@ def step(expr):
 	"""
 	assert isinstance(expr,Expr), "expr is not an expression, Expression type required"
 
-	if expr.is_a(BoolExpr):
+	if is_value(expr):
 		return expr
 
 	if expr.is_a(NotExpr):
@@ -143,7 +150,29 @@ def step(expr):
 		else:
 			return BoolExpr(value(expr))
 
+	if expr.is_a(AppExpr):
+		return step_app(expr)
+
 	raise Exception("Illegal state exception")
+
+
+def step_app(e):
+
+	if is_reducible(e.e1):
+		return AppExpr(step(e.e1),e.e2)
+
+	if not e.e1.is_a(AbsExpr):
+		raise Exception("Lambda Expression expected, actual" + str(e.e1))
+
+
+	if is_reducible(e.e2):
+		return AppExpr(e.e1,step(e.e2))
+
+	s = {
+		e.e1.var : e.e2
+	}
+	return subst(e.e1.var,s)
+
 
 
 def reduce(expr):
@@ -188,10 +217,8 @@ def subst(e,s):
 	assert isinstance(e,Expr), "Expression type required"
 	
 	if e.is_a(IdExpr):
-		expr = s.get(e.ref)
-		
-		if expr is not None:
-			return expr
+		if e.ref in s:
+			return s[e.ref]
 		else
 			return e
 
