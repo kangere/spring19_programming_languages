@@ -1,5 +1,5 @@
 from abc import ABC, abstractmethod
-from utils import *
+from lang.utils import *
 
 class Expr(TypeCheckerMixIn,ABC):
 	"""	Abstract Base class for all expressions """

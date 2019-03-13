@@ -1,7 +1,7 @@
 import unittest
-import func
-from expr import *
-from utils import *
+import lang.func as func
+from lang.expr import *
+
 
 class ExprTest(unittest.TestCase):
 	def setUp(self):
@@ -59,12 +59,7 @@ class ExprTest(unittest.TestCase):
 		self.assertTrue(isinstance(reduced_and,BoolExpr))
 		self.assertTrue(isinstance(reduced_or,BoolExpr))
 
-	def test_utils(self):
-		t = TypeCheckerMixIn()
-		self.assertTrue(t.is_a(TypeCheckerMixIn))	
-
 		
-if __name__ == '__main__':
-	unittest.main()
+
 
 	

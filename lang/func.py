@@ -1,4 +1,4 @@
-from expr import *
+from lang.expr import *
 
 def is_value(e):
 	return type(e) in (IdExpr,AbsExpr,BoolExpr)
@@ -204,7 +204,7 @@ def resolve(e, env = []):
 		return
 
 	if isinstance(e,AbsExpr):
-		env = env + [expr.var]
+		env = env + [e.var]
 		resolve(e.expr,env)
 		return 
 
@@ -219,7 +219,7 @@ def subst(e,s):
 	if e.is_a(IdExpr):
 		if e.ref in s:
 			return s[e.ref]
-		else
+		else:
 			return e
 
 	if isinstance(e,AbsExpr):
