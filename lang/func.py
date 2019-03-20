@@ -171,7 +171,7 @@ def step_app(e):
 	s = {
 		e.e1.var : e.e2
 	}
-	return subst(e.e1.var,s)
+	return subst(e.e1,s)
 
 
 
@@ -199,7 +199,7 @@ def resolve(e, env = []):
 
 	if isinstance(e,IdExpr):
 		for var in reversed(env):
-			if e._id == var._name:
+			if e.id == var.name:
 				e.ref = var
 		return
 
@@ -222,8 +222,8 @@ def subst(e,s):
 		else:
 			return e
 
-	if isinstance(e,AbsExpr):
+	if e.is_a(AbsExpr):
 		return AbsExpr(e.var,subst(e.expr,s))
 
-	if isinstance(e,AppExpr):
+	if e.is_a(AppExpr):
 		return AppExpr(subst(e.e1,s), subst(e.e2,s))

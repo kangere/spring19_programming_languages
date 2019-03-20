@@ -10,8 +10,8 @@ class LambdaTest(unittest.TestCase):
 		self.true_lambda = AbsExpr(Var("a"),AbsExpr(Var("b"),IdExpr("a")))
 		self.false_lambda = AbsExpr(Var("a"),AbsExpr(Var("b"),IdExpr("b")))
 		self.land = \
-					  AbsExpr("p", 
-					    AbsExpr("q", 
+					  AbsExpr(Var("p"), 
+					    AbsExpr(Var("q"), 
 					      AppExpr(
 					        AppExpr(
 					          IdExpr("p"), 
@@ -24,6 +24,20 @@ class LambdaTest(unittest.TestCase):
 		self.assertEqual(str(self.true_lambda),"\\a.\\b.a")
 		self.assertEqual(str(self.false_lambda),"\\a.\\b.b")
 		self.assertEqual(str(self.land),"\\p.\\q.p q p")
+
+	#TODO:implement
+	def test_application(self):
+		e1 = AppExpr(AppExpr(self.land,self.true_lambda),self.false_lambda)
+		resolve(e1)
+
+		e = e1	
+		while is_reducible(e):
+			e = step(e)
+			print(e)
+
+		print(e)
+
+
 
 	
 		

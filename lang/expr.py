@@ -50,20 +50,20 @@ class IdExpr(Expr):
 	"""
 	def __init__(self,_id):
 		self.ref = None
-		self._id = _id 
+		self.id = _id 
 
 	def __str__(self):
-		return f"{self._id}"
+		return f"{self.id}"
 
 class Var:
 	"""
 		Variable class to hold names
 	"""
 	def __init__(self,name):
-		self._name = name
+		self.name = name
 
 	def __str__(self):
-		return f"{self._name}"
+		return f"{self.name}"
 
 class AbsExpr(Expr):
 	"""
@@ -71,6 +71,7 @@ class AbsExpr(Expr):
 	"""
 	def __init__(self,var,expr):
 		assert isinstance(expr,Expr), "Expression type required, actual: " + type(exp)
+		assert isinstance(var,Var), "Variable required"
 		self.var = var
 		self.expr = expr
 
@@ -90,4 +91,32 @@ class AppExpr(Expr):
 	def __str__(self):
 		return f"{self.e1} {self.e2}"
 
+
+
+	##Binary Expressions
+
+class AddExpr(BinaryExpr):
+	def __str__(self):
+		return f"{self.e1} + {self.e2}"
+
+
+
+class SubExpr(BinaryExpr):
+	def __str__(self):
+		return f"{self.e1} - {self.e2}"
+
+
+class MultExpr(BinaryExpr):
+	def __str__(self):
+		return f"{self.e1} * {self.e2}"
+
+
+class DivExpr(BinaryExpr):
+	def __str__(self):
+		return f"{self.e1} / {self.e2}"
+
+
+class RemExpr(BinaryExpr):
+	def __str__(self):
+		return f"{self.e1} % {self.e2}"
 
