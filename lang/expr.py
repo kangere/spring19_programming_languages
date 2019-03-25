@@ -15,6 +15,15 @@ class BoolExpr(Expr):
 	def __str__(self):
 		return f"{self.value}"
 
+class IntExpr(Expr):
+	def __init__(self,value):
+		assert isinstance(value,int), "Integer type required"
+		self.value = value
+
+	def __str__(self):
+		return f"{self.value}"
+
+		
 class NotExpr(Expr):
 	def __init__(self,e1):
 		assert isinstance(e1,Expr), "Expression Type required"
@@ -33,6 +42,17 @@ class BinaryExpr(Expr):
 		self.e1 = e1
 		self.e2 = e2
 
+class ArithmeticExpr(BinaryExpr):
+	"""
+		Abstract base class for arithmetic binary classes
+	"""
+	pass
+
+class RelationalExpr(BinaryExpr):
+	"""
+		Abstract base class for relational binary classes
+	"""
+	pass
 
 class AndExpr(BinaryExpr):
 	def __str__(self):
@@ -89,34 +109,55 @@ class AppExpr(Expr):
 		self.e2 = e2
 
 	def __str__(self):
-		return f"{self.e1} {self.e2}"
+		return f"({self.e1}) ({self.e2})"
 
 
 
-	##Binary Expressions
+	#Arithmetic Expressions
 
-class AddExpr(BinaryExpr):
+class AddExpr(ArithmeticExpr):
 	def __str__(self):
 		return f"{self.e1} + {self.e2}"
 
 
 
-class SubExpr(BinaryExpr):
+class SubExpr(ArithmeticExpr):
 	def __str__(self):
 		return f"{self.e1} - {self.e2}"
 
 
-class MultExpr(BinaryExpr):
+class MultExpr(ArithmeticExpr):
 	def __str__(self):
 		return f"{self.e1} * {self.e2}"
 
 
-class DivExpr(BinaryExpr):
+class DivExpr(ArithmeticExpr):
 	def __str__(self):
 		return f"{self.e1} / {self.e2}"
 
 
-class RemExpr(BinaryExpr):
+class RemExpr(ArithmeticExpr):
 	def __str__(self):
 		return f"{self.e1} % {self.e2}"
 
+
+#Relational Expressions
+
+class GtExpr(RelationalExpr):
+	def __str__(self):
+		return f"{self.e1} > {self.e2}"
+
+
+class LtExpr(RelationalExpr):
+	def __str__(self):
+		return f"{self.e1} < {self.e2}"
+
+
+class GteqExpr(RelationalExpr):
+	def __str__(self):
+		return f"{self.e1} >= {self.e2}"
+
+
+class LteqExpr(RelationalExpr):
+	def __str__(self):
+		return f"{self.e1} <= {self.e2}"
