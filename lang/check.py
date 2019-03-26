@@ -3,7 +3,10 @@ from expr import *
 
 
 def is_bool(e):
+	return check(e) == boolType
 
+def is_int(e):
+	return check(e) == intType
 
 def is_same_type(t1,t2):
 
@@ -20,22 +23,34 @@ def has_same_type(e1,e2):
 
 def check_binary(e):
 
+	if e.is_a(RelationalExpr):
+		if  has_same_type(e.e1, e.e2):
+			return boolType	
+
+		raise Excpetion("Member types must be the same" + str(e))
+		
+
+	if e.is_a(LogicalExpr):
+		if is_bool(e.e1) and is_bool(e.e2): 
+			return boolType
+
+		raise Excpetion("Boolean Type expected, actual: " + str(e.e1) + str(e.e2))
+
 	if e.is_a(ArithmeticExpr):
-		if is_same_type(e.e1.type, e.e2.type):
+		if is_int(e.e1) and is_int(e.e2):
 			return intType
 
-		raise Excpetion("Invalid member types for " + str(e))
-
-	if type(e) is (AndExpr,OrExpr):
-		return
-
+		raise Excpetion("Integer Type expected, actual: " + str(e.e1) + str(e.e2))
 
 def do_check(e):
 
-	if type(e) is (BoolExpr,NotExpr):
+	if e.is_a(BoolExpr):
 		return boolType
 
-	if type(e) is BinaryExpr:
+	if e.is_a(IntExpr):
+		return intType 
+
+	if e.is_a(BinaryExpr):
 		return check_binary(e)
 
 

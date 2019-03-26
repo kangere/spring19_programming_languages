@@ -44,22 +44,29 @@ class BinaryExpr(Expr):
 
 class ArithmeticExpr(BinaryExpr):
 	"""
-		Abstract base class for arithmetic binary classes
+		Abstract base class for arithmetic binary expressions
 	"""
 	pass
 
 class RelationalExpr(BinaryExpr):
 	"""
-		Abstract base class for relational binary classes
+		Abstract base class for relational binary expressions
 	"""
 	pass
 
-class AndExpr(BinaryExpr):
+class LogicalExpr(BinaryExpr):
+	"""
+		Abstract base class for logical binary expression eg
+		and / or
+	"""
+
+	#logical Expressions
+class AndExpr(LogicalExpr):
 	def __str__(self):
 		return f"{self.e1} And {self.e2}"
 
 
-class OrExpr(BinaryExpr):
+class OrExpr(LogicalExpr):
 	def __str__(self):
 		return f"{self.e1} Or {self.e2}"
 
