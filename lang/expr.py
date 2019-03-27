@@ -80,7 +80,7 @@ class IdExpr(Expr):
 		self.id = _id 
 
 	def __str__(self):
-		return f"{self.id}"
+		return f"{self.id} : {self.ref} "
 
 class Var:
 	"""
@@ -92,13 +92,25 @@ class Var:
 	def __str__(self):
 		return f"{self.name}"
 
+class VarDecl:
+	"""
+		Variable class that also holds type information
+	"""
+	def __init__(self,name,t):
+		self.name = name
+		self.t = t 
+
+	def __str__(self):
+		return f"{self.name} : {self.t}"
+
+
 class AbsExpr(Expr):
 	"""
 		Lambda Expression
 	"""
 	def __init__(self,var,expr):
 		assert isinstance(expr,Expr), "Expression type required, actual: " + type(exp)
-		assert isinstance(var,Var), "Variable required"
+		assert type(var) in (Var,VarDecl), "Variable required"
 		self.var = var
 		self.expr = expr
 

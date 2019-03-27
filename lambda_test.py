@@ -25,8 +25,8 @@ class LambdaTest(unittest.TestCase):
 		self.assertEqual(str(self.false_lambda),"\\a.\\b.b")
 		self.assertEqual(str(self.land),"\\p.\\q.p q p")
 
-	#TODO:implement
-	def test_application(self):
+	#TODO:fix
+	def test_untyped_application(self):
 		e1 = AppExpr(AppExpr(self.land,self.true_lambda),self.false_lambda)
 		resolve(e1)
 
