@@ -16,9 +16,9 @@ class BoolType(Type):
 
 
 class IntType(Type):
- """
- 	Represents integer type
- """
+	"""
+		Represents integer type
+	"""
 	def __str__(self):
 		return "Int"
 

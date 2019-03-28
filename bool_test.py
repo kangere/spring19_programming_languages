@@ -1,9 +1,11 @@
 import unittest
-import lang.func as func
 from lang.expr import *
+from lang import check as c
+from lang import *
 
 
-class ExprTest(unittest.TestCase):
+
+class BoolTest(unittest.TestCase):
 	def setUp(self):
 		self.bool_expr = BoolExpr(False)
 		self.not_expr = NotExpr(BoolExpr(True))
@@ -58,6 +60,19 @@ class ExprTest(unittest.TestCase):
 		self.assertTrue(isinstance(reduced_not,BoolExpr))
 		self.assertTrue(isinstance(reduced_and,BoolExpr))
 		self.assertTrue(isinstance(reduced_or,BoolExpr))
+
+	def test_typechecking(self):
+		t1 = c.check(self.bool_expr)
+		t2 = c.check(self.not_expr)
+		t3 = c.check(self.and_expr)
+		t4 = c.check(self.and_expr_same)
+		t5 = c.check(self.or_expr)
+
+		self.assertEqual(type.boolType,t1)
+		self.assertEqual(type.boolType,t2)
+		self.assertEqual(type.boolType,t3)
+		self.assertEqual(type.boolType,t4)
+		self.assertEqual(type.boolType,t5)
 
 		
 

@@ -1,5 +1,5 @@
-from type import *
-from expr import *
+from lang.type import *
+from lang.expr import *
 
 
 def is_bool(e):
@@ -21,6 +21,14 @@ def is_same_type(t1,t2):
 def has_same_type(e1,e2):
 	return is_same_type(check(e1),check(e2))
 
+def check_not(e):
+	if is_bool(e.e1):
+		return boolType
+
+	raise TypeError("Boolean type expected, found: " + str(e.e1))
+
+
+
 def check_binary(e):
 
 	if e.is_a(RelationalExpr):
@@ -30,7 +38,7 @@ def check_binary(e):
 		if  has_same_type(e.e1, e.e2):
 			return boolType	
 
-		raise Excpetion("Member types must be the same" + str(e))
+		raise Exception("Member types must be the same" + str(e))
 		
 
 	if e.is_a(LogicalExpr):
@@ -40,7 +48,7 @@ def check_binary(e):
 		if is_bool(e.e1) and is_bool(e.e2): 
 			return boolType
 
-		raise Excpetion("Boolean Type expected, found: " + str(e.e1) + str(e.e2))
+		raise Exception("Boolean Type expected, found: " + str(e.e1) + str(e.e2))
 
 	if e.is_a(ArithmeticExpr):
 		# G |- e1 : Int   G |- e2 : Int
@@ -50,7 +58,7 @@ def check_binary(e):
 		if is_int(e.e1) and is_int(e.e2):
 			return intType
 
-		raise Excpetion("Integer Type expected, found: " + str(e.e1) + str(e.e2))
+		raise Exception("Integer Type expected, found: " + str(e.e1) + str(e.e2))
 
 
 def check_abs(e):
@@ -74,7 +82,7 @@ def check_app(e):
 
 	t2 = check(e.e2)
 
-	if not is_same_type(t1.param,t2)
+	if not is_same_type(t1.param,t2):
 		raise TypeError(str(t1.param) + " type expected, found: " + str(t2))
 	return t1.ret
 
@@ -90,6 +98,9 @@ def do_check(e):
 		if e.ref.t is None:
 			raise TypeError("Id does not have a type")
 		return e.ref.t
+
+	if e.is_a(NotExpr):
+		return check_not(e)
 
 	if e.is_a(BinaryExpr):
 		return check_binary(e)
@@ -108,7 +119,9 @@ def check(e):
 
 	assert isinstance(e,Expr), "Expression required"
 
-	if not e.type:
+	try:
+		t1 = e.type
+	except AttributeError:
 		e.type = do_check(e)
 
 	return e.type

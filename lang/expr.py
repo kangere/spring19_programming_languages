@@ -80,7 +80,7 @@ class IdExpr(Expr):
 		self.id = _id 
 
 	def __str__(self):
-		return f"{self.id} : {self.ref} "
+		return f"{self.id}"
 
 class Var:
 	"""
@@ -128,7 +128,7 @@ class AppExpr(Expr):
 		self.e2 = e2
 
 	def __str__(self):
-		return f"({self.e1}) ({self.e2})"
+		return f"{self.e1} {self.e2}"
 
 
 
