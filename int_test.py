@@ -22,3 +22,8 @@ class IntTest(unittest.TestCase):
 		self.assertEqual(type.intType,t2)
 		self.assertEqual(type.intType,t3)
 		self.assertEqual(type.intType,t4)
+
+
+	def test_evaluation(self):
+		self.assertEqual(3,eval.evaluate(self.add))
+		self.assertEqual(1,eval.evaluate(self.sub))

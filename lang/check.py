@@ -95,7 +95,7 @@ def do_check(e):
 		return intType 
 
 	if e.is_a(IdExpr):
-		if e.ref.t is None:
+		if e.ref is None:
 			raise TypeError("Id does not have a type")
 		return e.ref.t
 
@@ -119,9 +119,7 @@ def check(e):
 
 	assert isinstance(e,Expr), "Expression required"
 
-	try:
-		t1 = e.type
-	except AttributeError:
+	if not e.type:
 		e.type = do_check(e)
 
 	return e.type

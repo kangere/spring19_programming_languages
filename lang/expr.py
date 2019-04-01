@@ -3,6 +3,9 @@ from lang.utils import *
 
 class Expr(ABC,UtilsMixIn):
 	"""	Abstract Base class for all expressions """
+	def __init__(self):
+		self.type = None
+
 	@abstractmethod
 	def __str__(self):
 		pass
@@ -10,6 +13,7 @@ class Expr(ABC,UtilsMixIn):
 class BoolExpr(Expr):
 	def __init__(self,value):
 		assert isinstance(value,bool), "Boolean type required"
+		Expr.__init__(self)
 		self.value = value
 
 	def __str__(self):
@@ -18,6 +22,7 @@ class BoolExpr(Expr):
 class IntExpr(Expr):
 	def __init__(self,value):
 		assert isinstance(value,int), "Integer type required"
+		Expr.__init__(self)
 		self.value = value
 
 	def __str__(self):
@@ -27,6 +32,7 @@ class IntExpr(Expr):
 class NotExpr(Expr):
 	def __init__(self,e1):
 		assert isinstance(e1,Expr), "Expression Type required"
+		Expr.__init__(self)
 		self.e1 = e1;
 
 	def __str__(self):
@@ -39,6 +45,7 @@ class BinaryExpr(Expr):
 	def __init__(self,e1,e2):
 		assert isinstance(e1,Expr), "Expression Type required"
 		assert isinstance(e2,Expr), "Expression Type required"
+		Expr.__init__(self)
 		self.e1 = e1
 		self.e2 = e2
 
@@ -59,6 +66,7 @@ class LogicalExpr(BinaryExpr):
 		Abstract base class for logical binary expression eg
 		and / or
 	"""
+	pass
 
 	#logical Expressions
 class AndExpr(LogicalExpr):
@@ -76,6 +84,7 @@ class IdExpr(Expr):
 		IdExpression to reference other expressions
 	"""
 	def __init__(self,_id):
+		Expr.__init__(self)
 		self.ref = None
 		self.id = _id 
 
@@ -111,6 +120,7 @@ class AbsExpr(Expr):
 	def __init__(self,var,expr):
 		assert isinstance(expr,Expr), "Expression type required, actual: " + type(exp)
 		assert type(var) in (Var,VarDecl), "Variable required"
+		Expr.__init__(self)
 		self.var = var
 		self.expr = expr
 
@@ -124,6 +134,7 @@ class AppExpr(Expr):
 	def __init__(self,e1,e2):
 		assert isinstance(e1,Expr), "Expression type required, actual: " +type(e1)
 		assert isinstance(e2,Expr), "Expression type required, actual: " +type(e2)
+		Expr.__init__(self)
 		self.e1 = e1
 		self.e2 = e2
 
@@ -180,3 +191,13 @@ class GteqExpr(RelationalExpr):
 class LteqExpr(RelationalExpr):
 	def __str__(self):
 		return f"{self.e1} <= {self.e2}"
+
+
+class EqExpr(RelationalExpr):
+	def __str__(self):
+		return f"{self.e1} == {self.e2}"
+
+class NtEqExpr(RelationalExpr):
+	def __str__(self):
+		return f"{self.e1} != {self.e2}"
+

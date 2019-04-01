@@ -1,1 +1,1 @@
-__all__=["check","expr","func","type"]
+__all__=["check","expr","func","type","eval"]

@@ -1,6 +1,8 @@
 import unittest
 from lang.expr import *
 from lang.func import *
+from lang.check import *
+from lang.type import *
 
 
 
@@ -17,6 +19,8 @@ class LambdaTest(unittest.TestCase):
 					          IdExpr("p"), 
 					          IdExpr("q")),
 					        IdExpr("p"))))
+
+		self.typed_lambda = AbsExpr(VarDecl("p",intType),AddExpr(IntExpr(1),IdExpr("p")))
 
 
 
@@ -36,6 +40,15 @@ class LambdaTest(unittest.TestCase):
 			print(e)
 
 		print(e)
+
+	def test_typed_lambda(self):
+		resolve(self.typed_lambda)
+
+		t = check(self.typed_lambda)
+
+		self.assertTrue(isinstance(t,ArrowType))
+		self.assertEqual(t.param,intType)
+		self.assertEqual(t.ret,intType)
 
 
 

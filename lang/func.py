@@ -197,21 +197,28 @@ def reduce(expr):
 
 def resolve(e, env = []):
 
-	if isinstance(e,IdExpr):
+	if e.is_a(IdExpr):
 		for var in reversed(env):
 			if e.id == var.name:
 				e.ref = var
 		return
 
-	if isinstance(e,AbsExpr):
+	if e.is_a(NotExpr):
+		resolve(e.e1,env)
+		return
+
+	if e.is_a(AbsExpr):
 		env = env + [e.var]
 		resolve(e.expr,env)
 		return 
 
-	if isinstance(e,AppExpr):
+	if isinstance(e,AppExpr) or isinstance(e,BinaryExpr):
 		resolve(e.e1,env)
 		resolve(e.e2,env)
-		return 
+		return
+
+	return
+
 
 def subst(e,s):
 	assert isinstance(e,Expr), "Expression type required"
