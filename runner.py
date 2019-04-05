@@ -1,11 +1,12 @@
 import unittest
 
-import bool_test
-import utils_test
-import lambda_test
-import int_test
+import tests.bool_expr
+import tests.utils
+import tests.lambda_expr
+import tests.int_expr
+import tests.compound_expr
 
-from lang.expr import *
+
 
 #initialize the test suite
 loader = unittest.TestLoader()
@@ -13,10 +14,11 @@ suite = unittest.TestSuite()
 
 
 #add test to test suite
-suite.addTests(loader.loadTestsFromModule(bool_test))
-suite.addTests(loader.loadTestsFromModule(utils_test))
-suite.addTests(loader.loadTestsFromModule(lambda_test))
-suite.addTests(loader.loadTestsFromModule(int_test))
+suite.addTests(loader.loadTestsFromModule(tests.bool_expr))
+suite.addTests(loader.loadTestsFromModule(tests.utils))
+suite.addTests(loader.loadTestsFromModule(tests.lambda_expr))
+suite.addTests(loader.loadTestsFromModule(tests.int_expr))
+suite.addTests(loader.loadTestsFromModule(tests.compound_expr))
 
 #initialise a runner, pass it your suite
 runner = unittest.TextTestRunner(verbosity=3)

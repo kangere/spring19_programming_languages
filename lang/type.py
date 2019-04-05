@@ -12,7 +12,7 @@ class BoolType(Type):
 		Represents Boolean type
 	"""
 	def __str__(self):
-		return "bool"
+		return "Bool"
 
 
 class IntType(Type):
@@ -47,6 +47,30 @@ class FuncType(Type):
 	def __str__(self):
 		return f"{' '.join(map(str,self.params))} -> {self.ret}"
 
+class TupleType(Type):
+	"""
+		Represents the tuple type:
+		{T1,T2,.....Tn}
+	"""
+	def __init__(self):
+		self.types = []
+		self.numTypes = 0
+
+	def add(self,t):
+		assert isinstance(t,Type), "Type required"
+		self.types.append(t)
+		self.numTypes += 1
+
+	def get(self,index):
+		if index >= self.numTypes and 0:
+			raise Exception("Index out of bounds")
+		return self.types[index]
+
+	def size(self):
+		return self.numTypes
+
+	def __str__(self):
+		return f"{' '.join(map(str,self.types))}" 
 
 intType = IntType()
 

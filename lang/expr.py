@@ -1,5 +1,7 @@
 from abc import ABC, abstractmethod
 from lang.utils import *
+from lang.type import *
+
 
 class Expr(ABC,UtilsMixIn):
 	"""	Abstract Base class for all expressions """
@@ -200,4 +202,51 @@ class EqExpr(RelationalExpr):
 class NtEqExpr(RelationalExpr):
 	def __str__(self):
 		return f"{self.e1} != {self.e2}"
+
+
+
+
+#Compund Expressions 
+
+import lang.check as c
+
+class Tuple(Expr):
+	"""
+		Tuple implementation
+	"""
+	def __init__(self,*args):
+		Expr.__init__(self)
+		self.listItems = []
+		self.type = TupleType()
+		for arg in args:
+			if isinstance(arg,Expr):
+				self.listItems.append(arg)
+				self.type.add(c.check(arg))
+			else:
+				raise TypeError("Expression required, found")
+		self.numMembers = len(self.listItems)
+
+
+	def size(self):
+		return self.numMembers
+
+	def get(self,index):
+		if index >= self.numMembers and index < 0:
+			raise Exception("Index is out of bounds")
+		return self.listItems[index]
+
+	def getType(self,index):
+		if index >= self.numMembers and index < 0:
+			raise Exception("Index is out of bounds")
+		return self.type.get(index)
+
+	def __str__(self):
+		s = '{ '
+		for i,expr in enumerate(self.listItems):
+			s += str(expr) + ": " + str(self.type.get(i))
+			s += ", "
+		
+		s = s[:len(s)-2] + ' }'
+		return s
+
 
