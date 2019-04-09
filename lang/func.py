@@ -1,4 +1,5 @@
 from lang.expr import *
+from lang.eval import *
 
 def is_value(e):
 	return type(e) in (IdExpr,AbsExpr,BoolExpr)
@@ -62,33 +63,6 @@ def same(arg1,arg2):
 
 
 
-def value(expr):
-	"""
-		Function computes the value of an expression
-
-		Paramerter:
-		expr (Expr): The whose value is to be computed
-
-		Returns:
-		bool: the value of the expression
-	"""
-	assert isinstance(expr,Expr), "expr is not an expression, Expression type required"
-
-	if expr.is_a(BoolExpr):
-		return expr.value
-
-	if expr.is_a(NotExpr):
-		return not value(expr.e1)
-
-	if expr.is_a(AndExpr):
-		return value(expr.e1) and value(expr.e2)
-
-	if expr.is_a(OrExpr):
-		return value(expr.e1) or value(expr.e2)
-
-	raise Exception("Illegal state exception")
-
-
 def size(expr):
 	"""
 		Fucntion computes size of an expression
@@ -130,7 +104,7 @@ def step(expr):
 
 	if expr.is_a(NotExpr):
 		if expr.e1.is_a(BoolExpr):
-			return BoolExpr(not value(expr.e1))
+			return BoolExpr(not evaluate(expr.e1))
 		else:
 			return NotExpr(step(expr.e1))
 
@@ -140,7 +114,7 @@ def step(expr):
 		elif not expr.e2.is_a(BoolExpr):
 			return AndExpr(expr.e1, step(expr.e2))
 		else:
-			return BoolExpr(value(expr))
+			return BoolExpr(evaluate(expr))
 
 	if expr.is_a(OrExpr):
 		if not expr.e1.is_a(BoolExpr):
@@ -148,7 +122,7 @@ def step(expr):
 		elif not expr.e2.is_a(BoolExpr):
 			return OrExpr(expr.e1, step(expr.e2))
 		else:
-			return BoolExpr(value(expr))
+			return BoolExpr(evaluate(expr))
 
 	if expr.is_a(AppExpr):
 		return step_app(expr)

@@ -70,7 +70,7 @@ def evaluate(expr):
 		return expr.value
 
 	if expr.is_a(NotExpr):
-		return not value(expr.e1)
+		return not evaluate(expr.e1)
 
 	if expr.is_a(LogicalExpr):
 		return eval_logical(expr)

@@ -62,7 +62,7 @@ class TupleType(Type):
 		self.numTypes += 1
 
 	def get(self,index):
-		if index >= self.numTypes and 0:
+		if index >= self.numTypes and index < 0:
 			raise Exception("Index out of bounds")
 		return self.types[index]
 

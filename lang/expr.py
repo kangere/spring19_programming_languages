@@ -210,35 +210,43 @@ class NtEqExpr(RelationalExpr):
 
 import lang.check as c
 
-class Tuple(Expr):
+class BaseTuple(Expr):
 	"""
-		Tuple implementation
+		Base Class for n-ary compound expressions, i.e tuple
 	"""
-	def __init__(self,*args):
+	def __init__(self):
 		Expr.__init__(self)
-		self.listItems = []
 		self.type = TupleType()
-		for arg in args:
-			if isinstance(arg,Expr):
-				self.listItems.append(arg)
-				self.type.add(c.check(arg))
-			else:
-				raise TypeError("Expression required, found")
-		self.numMembers = len(self.listItems)
+		self.numMembers = 0
 
-
-	def size(self):
-		return self.numMembers
-
-	def get(self,index):
-		if index >= self.numMembers and index < 0:
-			raise Exception("Index is out of bounds")
-		return self.listItems[index]
 
 	def getType(self,index):
 		if index >= self.numMembers and index < 0:
 			raise Exception("Index is out of bounds")
 		return self.type.get(index)
+
+	def size(self):
+		return self.numMembers
+
+class Tuple(BaseTuple):
+	"""
+		Generalized tuple implementation
+	"""
+	def __init__(self,*args):
+		BaseTuple.__init__(self)
+		self.listItems = []
+		for arg in args:
+			if isinstance(arg,Expr):
+				self.listItems.append(arg)
+				self.type.add(c.check(arg))
+			else:
+				raise TypeError("Expression required, found:" + str(arg))
+		self.numMembers = len(self.listItems)
+
+	def get(self,index):
+		if index >= self.numMembers and index < 0:
+			raise Exception("Index is out of bounds")
+		return self.listItems[index]
 
 	def __str__(self):
 		s = '{ '
@@ -248,5 +256,43 @@ class Tuple(Expr):
 		
 		s = s[:len(s)-2] + ' }'
 		return s
+
+
+
+
+class Record(BaseTuple):
+	"""
+		Specialised n-ary expression where members are associated with labels
+	"""
+	def __init__(self,**kwargs):
+		BaseTuple.__init__(self)
+		self.dictItems = {}
+		for key,value in kwargs.items():
+			if isinstance(value,Expr):
+				self.dictItems[key] = value
+				self.type.add(c.check(value))
+			else:
+				raise TypeError("Expression required, found:" + str(value))
+		self.numMembers = len(self.dictItems)
+
+	def get(self,key):
+		if key not in self.dictItems:
+			raise Exception("No value for key: " + str(key))
+		return self.dictItems[key]
+
+	def __str__(self):
+		s = '{ '
+		for key,value in self.dictItems.items():
+			s += key + "=" + str(value)
+			s += ", "
+		
+		s = s[:len(s)-2] + ' }'
+		return s
+
+class Variant(Expr):
+	"""
+		Variant Implementation
+	"""
+	pass
 
 

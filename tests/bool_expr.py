@@ -20,10 +20,10 @@ class BoolTest(unittest.TestCase):
 		self.assertEqual(func.height(self.or_expr),2)
 
 	def test_value(self):
-		self.assertTrue(func.value(self.or_expr))
-		self.assertFalse(func.value(self.bool_expr))
-		self.assertFalse(func.value(self.and_expr))
-		self.assertFalse(func.value(self.not_expr))
+		self.assertTrue(eval.evaluate(self.or_expr))
+		self.assertFalse(eval.evaluate(self.bool_expr))
+		self.assertFalse(eval.evaluate(self.and_expr))
+		self.assertFalse(eval.evaluate(self.not_expr))
 
 	def test_same(self):
 		self.assertFalse(func.same(self.not_expr,self.and_expr))
