@@ -51,6 +51,24 @@ def eval_logical(e):
 
 	raise TypeError("Logical expression exprected, actual: " + str(expr))
 
+def eval_tuple(e):
+	new_list = []
+
+	for expr in e.listItems:
+		new_list.append(evaluate(expr))
+
+	return new_list
+
+def eval_record(e):
+	new_dict = {}
+
+	for key,value in e.dictItems.items():
+		new_dict[key] = evaluate(value)
+
+	return new_dict
+
+
+
 def evaluate(expr):
 	"""
 		Function computes the value of an expression
@@ -77,6 +95,12 @@ def evaluate(expr):
 
 	if expr.is_a(ArithmeticExpr):
 		return eval_arithmetic(expr)
+
+	if expr.is_a(Tuple):
+		return eval_tuple(expr)
+
+	if expr.is_a(Record):
+		return eval_record(expr)
 
 	
 

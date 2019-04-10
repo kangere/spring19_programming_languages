@@ -293,6 +293,31 @@ class Variant(Expr):
 	"""
 		Variant Implementation
 	"""
-	pass
+	
+	def __init__(self,t1,t2):
+		Expr.__init__(self)
+		self.t1 = t1
+		self.t2 = t2
+		self.expr = None
+
+	def add(self,expr):
+		assert isinstance(expr,Expr), "Expression required"
+		self.expr = expr
+		self.t3 = c.check(self.expr)
+
+		if self.t3 == self.t2:
+			self.type = self.t2
+		elif self.t3 == self.t1:
+			self.type = self.t1
+		else
+			raise Exception("Ill formed variant, type: " + str(self.t3) + " not found")
+
+	def get(self):
+		if self.expr is None:
+			raise Exception("Variant has not been initialised")
+		return self.expr
+
+	def __str__(self):
+		return str(self.expr)
 
 

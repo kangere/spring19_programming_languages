@@ -25,6 +25,15 @@ class CompoundExprTest(unittest.TestCase):
 		self.assertEqual("{ True: Bool, 2: Int }",str(self.tuple))
 		self.assertEqual("{ x=3, y=False }",str(self.record))
 
+	def test_evaluate(self):
+		evalTuple = eval.evaluate(self.tuple)
+		evalRecord = eval.evaluate(self.record)
+
+		self.assertEqual(True,evalTuple[0])
+		self.assertEqual(2,evalTuple[1])
+		self.assertEqual(3,evalRecord['x'])
+		self.assertEqual(False,evalRecord['y'])
+
 
 
 	
