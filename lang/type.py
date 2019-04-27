@@ -72,6 +72,27 @@ class TupleType(Type):
 	def __str__(self):
 		return f"{' '.join(map(str,self.types))}" 
 
+
+class UniversalType(Type):
+
+	def __init__(self,name):
+		self.name = name
+
+
+class AbsType(Type):
+	
+	def __init__(self,var,expr):
+		self.var = var
+		self.expr = expr
+
+class AppType(Type):
+	
+	def __init__(self,t1,t2):
+		assert isinstance(t1,Type)
+		assert isinstance(t2,Type)
+		self.t1 = t1
+		self.t2 = t2
+
 intType = IntType()
 
 boolType = BoolType()

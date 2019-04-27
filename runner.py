@@ -5,6 +5,7 @@ import tests.utils
 import tests.lambda_expr
 import tests.int_expr
 import tests.compound_expr
+import tests.universal_type
 
 
 
@@ -19,6 +20,7 @@ suite.addTests(loader.loadTestsFromModule(tests.utils))
 suite.addTests(loader.loadTestsFromModule(tests.lambda_expr))
 suite.addTests(loader.loadTestsFromModule(tests.int_expr))
 suite.addTests(loader.loadTestsFromModule(tests.compound_expr))
+suite.addTests(loader.loadTestsFromModule(tests.universal_type))
 
 #initialise a runner, pass it your suite
 runner = unittest.TextTestRunner(verbosity=3)

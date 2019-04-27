@@ -1,5 +1,6 @@
 from lang.expr import *
 from lang.eval import *
+from lang.type import *
 
 def is_value(e):
 	return type(e) in (IdExpr,AbsExpr,BoolExpr)
@@ -147,6 +148,19 @@ def step_app(e):
 	}
 	return subst(e.e1,s)
 
+def app_type(t):
+	assert isinstance(t,AppType)
+
+	if not isinstance(t.t1, AbsType):
+		raise TypeError("type abstraction expected, found " + t.t1)
+
+	if not isinstance(t.t1.expr.var,VarDecl):
+		raise TypeError("Typed lambda expression expected")
+
+	s = {
+		t.t1.var : t.t2
+	}
+	return substType(t.t1,s)
 
 
 def reduce(expr):
@@ -194,6 +208,8 @@ def resolve(e, env = []):
 	return
 
 
+
+
 def subst(e,s):
 	assert isinstance(e,Expr), "Expression type required"
 	
@@ -208,3 +224,19 @@ def subst(e,s):
 
 	if e.is_a(AppExpr):
 		return AppExpr(subst(e.e1,s), subst(e.e2,s))
+
+def substType(t,s):
+
+	if isinstance(t,UniversalType):
+		if t.name in s:
+			return s[t.name]
+		raise Exception("No member " + t.name)
+
+	if isinstance(t,AbsType):
+		newType = substType(t.expr.var.t,s)
+		
+		#rewrite type in lambda expressions
+		newVar = VarDecl(t.expr.var.name,newType)
+
+		#return substituted expression
+		return AbsExpr(newVar,t.expr)

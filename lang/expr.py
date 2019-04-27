@@ -105,7 +105,7 @@ class Var:
 
 class VarDecl:
 	"""
-		Variable class that also holds type information
+		Variable class that  holds both name and type information
 	"""
 	def __init__(self,name,t):
 		self.name = name
@@ -309,7 +309,7 @@ class Variant(Expr):
 			self.type = self.t2
 		elif self.t3 == self.t1:
 			self.type = self.t1
-		else
+		else:
 			raise Exception("Ill formed variant, type: " + str(self.t3) + " not found")
 
 	def get(self):
