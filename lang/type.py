@@ -73,7 +73,7 @@ class TupleType(Type):
 		return f"{' '.join(map(str,self.types))}" 
 
 
-class UniversalType(Type):
+class IdType(Type):
 
 	def __init__(self,name):
 		self.name = name

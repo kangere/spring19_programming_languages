@@ -227,7 +227,7 @@ def subst(e,s):
 
 def substType(t,s):
 
-	if isinstance(t,UniversalType):
+	if isinstance(t,IdType):
 		if t.name in s:
 			return s[t.name]
 		raise Exception("No member " + t.name)

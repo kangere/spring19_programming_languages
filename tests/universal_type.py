@@ -7,7 +7,7 @@ from lang.func import *
 class UniversalTypeTest(unittest.TestCase):
 
 	def setUp(self):
-		self.uType = UniversalType('X')
+		self.uType = IdType('X')
 
 		#lambda expression with Universaly Quantified type
 		self.expr = AbsExpr(VarDecl('x',self.uType),IdExpr('x'))
@@ -15,7 +15,7 @@ class UniversalTypeTest(unittest.TestCase):
 		self.absType = AbsType('X',self.expr)
 
 		#Type Application
-		#(\X. \x:X. x int)
+		#(\T.\x:T.x  [int])
 		self.appType = AppType(self.absType,intType)
 
 	def test_typeApplication(self):
